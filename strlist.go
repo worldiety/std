@@ -1,66 +1,66 @@
 package std
 
-// A List covers an []interface{} slice with various helper methods.
-type List struct {
-	entries []interface{}
+// A StrList covers a []string slice with various helper methods.
+type StrList struct {
+	entries []string
 }
 
 // Len returns the amount of elements in the list
-func (l *List) Len() int {
+func (l *StrList) Len() int {
 	return len(l.entries)
 }
 
 // Add appends another unboxed element
-func (l *List) Add(v *Box) {
-	l.entries = append(l.entries, v.Unbox())
+func (l *StrList) Add(v string) {
+	l.entries = append(l.entries, v)
 }
 
 // AddAll appends all other elements
-func (l *List) AddAll(v List) {
+func (l *StrList) AddAll(v StrList) {
 	l.entries = append(l.entries, v.entries...)
 }
 
 // Remove deletes the element at the given index. If out of bounds, false is returned instead of panic.
-func (l *List) Remove(idx int) bool {
+func (l *StrList) Remove(idx int) bool {
 	if idx < 0 || idx >= len(l.entries) {
 		return false
 	}
 	copy(l.entries[idx:], l.entries[idx+1:])
-	l.entries[len(l.entries)-1] = nil //be GC friendly
+	l.entries[len(l.entries)-1] = "" //be GC friendly
 	l.entries = l.entries[:len(l.entries)-1]
 	return true
 }
 
-// Get returns the element at the given position or nil, if otherwise an out of bounds would be thrown
-func (l *List) Get(idx int) *Box {
+// Get returns the element at the given position or the empty string
+func (l *StrList) Get(idx int) string {
 	if idx < 0 || idx >= len(l.entries) {
-		return nil
+		return ""
 	}
-	return NewBox(l.entries[idx])
+	return l.entries[idx]
 }
 
 // Set replaces the unboxed value. If index is out of bounds, false is returned
-func (l *List) Set(idx int, value *Box) bool {
+func (l *StrList) Set(idx int, value string) bool {
 	if idx < 0 || idx >= len(l.entries) {
 		return false
 	}
-	l.entries[idx] = value.Unbox()
+	l.entries[idx] = value
 }
 
 // Clear removes all entries
-func (l *List) Clear() {
+func (l *StrList) Clear() {
 	// let the GC do its job
 	l.entries = nil
 }
 
 // Box returns this list as a box
-func (l *List) Box() *Box {
+func (l *StrList) Box() *Box {
 	return NewBox(l)
 }
 
 // Slice returns the underlying slice in a slice container as a defensive copy
-func (l *List) Slice() *Slice {
-	cpy := make([]interface{}, l.Len())
+func (l *StrList) Slice() *StrSlice {
+	cpy := make([]string, l.Len())
 	copy(cpy, l.entries)
-	return &Slice{cpy}
+	return &StrSlice{cpy}
 }

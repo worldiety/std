@@ -1,50 +1,49 @@
 package std
 
-// A Map can use more or less arbitrary key/value boxes and is a map[interface{}]interface{}. The key
-// must be a compatible map type, like string or int.
-type Map struct {
-	// Map contains all unboxed keys and values
-	Map map[interface{}]interface{}
+// A StrMap is a map[string]interface{} and holds arbitrary unboxed values.
+type StrMap struct {
+	// Map contains all string keys and values
+	Map map[string]interface{}
 }
 
-func (m *Map) init() {
+func (m *StrMap) init() {
 	if m.Map == nil {
-		m.Map = make(map[interface{}]interface{})
+		m.Map = make(map[string]interface{})
 	}
 }
 
 // Put replaces any unboxed key in the map with the unboxed value
-func (m *Map) Put(key *Box, value *Box) {
+func (m *StrMap) Put(key string, value *Box) {
 	m.init()
-	m.Map[key.Unbox()] = value.Unbox()
+	m.Map[key] = value.Unbox()
 }
 
 // Get returns the value in a box for the given key or nil
-func (m *Map) Get(key *Box) *Box {
+func (m *StrMap) Get(key string) *Box {
 	m.init()
-	return NewBox(m.Map[key.Unbox()])
+	return NewBox(m.Map[key])
 }
 
 // Len returns the amount of entries in the map
-func (m *Map) Len() int {
+func (m *StrMap) Len() int {
 	m.init()
 	return len(m.Map)
 }
 
 // Keys returns the keys as a Slice
-func (m *Map) Keys() *Slice {
+func (m *StrMap) Keys() *StrSlice {
 	m.init()
-	res := make([]interface{}, len(m.Map))
+	res := make([]string, len(m.Map))
 	idx := 0
 	for k := range m.Map {
 		res[idx] = k
 		idx++
 	}
-	return &Slice{res}
+	return &StrSlice{res}
 }
 
 // Values returns the values as a Slice
-func (m *Map) Values() *Slice {
+func (m *StrMap) Values() *Slice {
 	m.init()
 	res := make([]interface{}, len(m.Map))
 	idx := 0
@@ -56,19 +55,19 @@ func (m *Map) Values() *Slice {
 }
 
 // Has checks if the unboxed key exists, not if the associated value is nil or not
-func (m *Map) Has(key *Box) bool {
+func (m *StrMap) Has(key string) bool {
 	m.init()
-	_, ok := m.Map[key.Unbox()]
+	_, ok := m.Map[key]
 	return ok
 }
 
 // Delete removes the unboxed key from the map
-func (m *Map) Delete(key *Box) {
+func (m *StrMap) Delete(key string) {
 	m.init()
-	delete(m.Map, key.Unbox())
+	delete(m.Map, key)
 }
 
 // Box returns this Map in a box
-func (m *Map) Box() *Box {
+func (m *StrMap) Box() *Box {
 	return &Box{m}
 }
