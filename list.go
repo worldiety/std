@@ -45,6 +45,7 @@ func (l *List) Set(idx int, value *Box) bool {
 		return false
 	}
 	l.entries[idx] = value.Unbox()
+	return true
 }
 
 // Clear removes all entries
