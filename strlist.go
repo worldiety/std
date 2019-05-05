@@ -45,6 +45,7 @@ func (l *StrList) Set(idx int, value string) bool {
 		return false
 	}
 	l.entries[idx] = value
+	return true
 }
 
 // Clear removes all entries
