@@ -1,6 +1,7 @@
 package std
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 )
@@ -149,8 +150,27 @@ func (i *Box) AsStrMap() *StrMap {
 	return nil
 }
 
-// Int tries to interpret any string or number gracefully into an int64. If it fails, returns just 0
-func (i *Box) Int() int64 {
+// AsContext tries to wrap a context.Context or asserts a std.Context, otherwise returns nil
+func (i *Box) AsContext() *Context {
+	switch t := i.Value.(type) {
+	case context.Context:
+		return &Context{Value: nil}
+	case *Context:
+		return t
+	}
+	return nil
+}
+
+func (i *Box) Int() int {
+	return int(i.Int64())
+}
+
+func (i *Box) Int32() int32 {
+	return int32(i.Int64())
+}
+
+// Int64 tries to interpret any string or number gracefully into an int64. If it fails, returns just 0
+func (i *Box) Int64() int64 {
 	switch t := i.Value.(type) {
 	case int8:
 		return int64(t)
@@ -186,7 +206,7 @@ func (i *Box) Int() int64 {
 }
 
 // Float tries to interpret any number gracefully into a Float. If it fails, returns NaN
-func (i *Box) Float() float64 {
+func (i *Box) Float64() float64 {
 	switch t := i.Value.(type) {
 	case int8:
 		return float64(t)
