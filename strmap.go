@@ -21,7 +21,7 @@ func (m *StrMap) Put(key string, value *Box) {
 // Get returns the value in a box for the given key or nil
 func (m *StrMap) Get(key string) *Box {
 	m.init()
-	return NewBox(m.Map[key])
+	return Wrap(m.Map[key])
 }
 
 // Len returns the amount of entries in the map
@@ -30,7 +30,7 @@ func (m *StrMap) Len() int {
 	return len(m.Map)
 }
 
-// Keys returns the keys as a Slice
+// Keys returns the keys as a Slice. Caution: the order of keys is not stable, so keep the StrSlice while iterating.
 func (m *StrMap) Keys() *StrSlice {
 	m.init()
 	res := make([]string, len(m.Map))

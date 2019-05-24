@@ -8,8 +8,9 @@ type Box struct {
 	Value interface{}
 }
 
-// NewBox is not available in gomobile and is a factory for boxes and returns a nil box if value is nil
-func NewBox(value interface{}) *Box {
+// Wrap is not available in gomobile and is a factory for boxes and returns a nil box if value is nil.
+// It is not called NewBox() because the unsupported type would create a private constructor.
+func Wrap(value interface{}) *Box {
 	if value == nil {
 		return nil
 	}

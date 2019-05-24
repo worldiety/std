@@ -16,13 +16,13 @@ func TestStrMap_Put(t *testing.T) {
 
 func TestMap_Put(t *testing.T) {
 	mp := &Map{}
-	mp.Put(NewBox("hello"), NewBox("world"))
-	if !mp.Has(NewBox("hello")) {
+	mp.Put(Wrap("hello"), Wrap("world"))
+	if !mp.Has(Wrap("hello")) {
 		t.Fatal("expected hello")
 	}
 
-	if mp.Get(NewBox("hello")).Unbox() != "world" {
-		t.Fatal("unexpected", mp.Get(NewBox("hello")))
+	if mp.Get(Wrap("hello")).Unbox() != "world" {
+		t.Fatal("unexpected", mp.Get(Wrap("hello")))
 	}
 
 	mp.Delete(nil)

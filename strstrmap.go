@@ -30,7 +30,7 @@ func (m *StrStrMap) Len() int {
 	return len(m.Map)
 }
 
-// Keys returns the keys as a Slice
+// Keys returns the keys as a Slice. Caution: the order of keys is not stable, so keep the StrSlice while iterating.
 func (m *StrStrMap) Keys() *StrSlice {
 	m.init()
 	res := make([]string, len(m.Map))

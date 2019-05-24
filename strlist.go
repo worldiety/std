@@ -56,7 +56,7 @@ func (l *StrList) Clear() {
 
 // Box returns this list as a box
 func (l *StrList) Box() *Box {
-	return NewBox(l)
+	return Wrap(l)
 }
 
 // Slice returns the underlying slice in a slice container as a defensive copy

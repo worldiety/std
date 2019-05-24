@@ -19,10 +19,10 @@ func (m *Map) Put(key *Box, value *Box) {
 	m.Map[key.Unbox()] = value.Unbox()
 }
 
-// Get returns the value in a box for the given key or nil
+// Get returns the value in a box for the given key or nil.
 func (m *Map) Get(key *Box) *Box {
 	m.init()
-	return NewBox(m.Map[key.Unbox()])
+	return Wrap(m.Map[key.Unbox()])
 }
 
 // Len returns the amount of entries in the map
@@ -31,7 +31,7 @@ func (m *Map) Len() int {
 	return len(m.Map)
 }
 
-// Keys returns the keys as a Slice
+// Keys returns the keys as a Slice. Caution: the order of keys is not stable, so keep the StrSlice while iterating.
 func (m *Map) Keys() *Slice {
 	m.init()
 	res := make([]interface{}, len(m.Map))

@@ -36,7 +36,7 @@ func (l *List) Get(idx int) *Box {
 	if idx < 0 || idx >= len(l.entries) {
 		return nil
 	}
-	return NewBox(l.entries[idx])
+	return Wrap(l.entries[idx])
 }
 
 // Set replaces the unboxed value. If index is out of bounds, false is returned
@@ -56,7 +56,7 @@ func (l *List) Clear() {
 
 // Box returns this list as a box
 func (l *List) Box() *Box {
-	return NewBox(l)
+	return Wrap(l)
 }
 
 // Slice returns the underlying slice in a slice container as a defensive copy
