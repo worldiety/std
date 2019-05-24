@@ -188,6 +188,8 @@ func (i *Box) Int64() int64 {
 		return int64(t)
 	case int64:
 		return t
+	case int:
+		return int64(t)
 	case string:
 		i, _ := strconv.ParseInt(t, 10, 64)
 		return i
@@ -223,6 +225,8 @@ func (i *Box) Float64() float64 {
 	case uint64:
 		return float64(t)
 	case int64:
+		return float64(t)
+	case int:
 		return float64(t)
 	case string:
 		i, _ := strconv.ParseFloat(t, 64)
@@ -261,5 +265,5 @@ func (i *Box) String() string {
 	if i == nil || i.Value == nil {
 		return ""
 	}
-	return fmt.Sprintf(":'%+v'", i.Value)
+	return fmt.Sprintf("%+v", i.Value)
 }
