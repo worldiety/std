@@ -88,6 +88,9 @@ func (i *Box) AsInt64() (int64, error) {
 
 // IsBoxSlice checks if the type is one of []interface{}|*[]interface{}|*Slice
 func (i *Box) IsSlice() bool {
+	if i == nil{
+		return false
+	}
 	switch i.Value.(type) {
 	case []interface{}:
 		return true
@@ -101,6 +104,9 @@ func (i *Box) IsSlice() bool {
 
 // AsSlice wraps the underlying slice into a Slice or returns nil
 func (i *Box) AsSlice() *Slice {
+	if i == nil{
+		return nil
+	}
 	switch t := i.Value.(type) {
 	case []interface{}:
 		return &Slice{t}
@@ -114,6 +120,9 @@ func (i *Box) AsSlice() *Slice {
 
 // IsMap checks if the type is map[string]interface{}
 func (i *Box) IsMap() bool {
+	if i == nil{
+		return false
+	}
 	if _, ok := i.Value.(map[string]interface{}); ok {
 		return true
 	}
@@ -122,6 +131,9 @@ func (i *Box) IsMap() bool {
 
 // AsMap tries to wrap a map[interface{}]interface{} or returns nil
 func (i *Box) AsMap() *Map {
+	if i == nil{
+		return nil
+	}
 	switch t := i.Value.(type) {
 	case map[interface{}]interface{}:
 		return &Map{t}
@@ -133,6 +145,9 @@ func (i *Box) AsMap() *Map {
 
 // IsStrMap checks if the type is map[string]interface{}
 func (i *Box) IsStrMap() bool {
+	if i == nil{
+		return false
+	}
 	if _, ok := i.Value.(map[string]interface{}); ok {
 		return true
 	}
@@ -141,6 +156,9 @@ func (i *Box) IsStrMap() bool {
 
 // AsStrMap tries to wrap a map[string]interface{} or returns nil
 func (i *Box) AsStrMap() *StrMap {
+	if i == nil{
+		return nil
+	}
 	switch t := i.Value.(type) {
 	case map[string]interface{}:
 		return &StrMap{t}
@@ -152,6 +170,9 @@ func (i *Box) AsStrMap() *StrMap {
 
 // AsContext tries to wrap a context.Context or asserts a std.Context, otherwise returns nil
 func (i *Box) AsContext() *Context {
+	if i == nil {
+		return nil
+	}
 	switch t := i.Value.(type) {
 	case context.Context:
 		return &Context{Value: nil}
@@ -171,6 +192,9 @@ func (i *Box) Int32() int32 {
 
 // Int64 tries to interpret any string or number gracefully into an int64. If it fails, returns just 0
 func (i *Box) Int64() int64 {
+	if i == nil {
+		return 0
+	}
 	switch t := i.Value.(type) {
 	case int8:
 		return int64(t)
@@ -209,6 +233,9 @@ func (i *Box) Int64() int64 {
 
 // Float tries to interpret any number gracefully into a Float. If it fails, returns NaN
 func (i *Box) Float64() float64 {
+	if i == nil {
+		return 0
+	}
 	switch t := i.Value.(type) {
 	case int8:
 		return float64(t)
@@ -247,6 +274,9 @@ func (i *Box) Float64() float64 {
 
 // Bool tries to interpret any number or string gracefully into a boolean. If it fails, returns false.
 func (i *Box) Bool() bool {
+	if i == nil {
+		return false
+	}
 	switch t := i.Value.(type) {
 	case string:
 		b, _ := strconv.ParseBool(t)
