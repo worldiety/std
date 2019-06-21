@@ -24,6 +24,38 @@ func (m *StrMap) Get(key string) *Box {
 	return Wrap(m.Map[key])
 }
 
+// String is a shortcut for #Get(key).String() and avoids an extra Box allocation
+func (m *StrMap) String(key string) string {
+	if m == nil {
+		return ""
+	}
+	return duckTypeString(m.Map[key])
+}
+
+// Int32 is a shortcut for #Get(key).Int32() and avoids an extra Box allocation
+func (m *StrMap) Int32(key string) int32 {
+	if m == nil {
+		return 0
+	}
+	return int32(duckTypeInt64(m.Map[key]))
+}
+
+// Int64 is a shortcut for #Get(key).Int64() and avoids an extra Box allocation
+func (m *StrMap) Int64(key string) int64 {
+	if m == nil {
+		return 0
+	}
+	return duckTypeInt64(m.Map[key])
+}
+
+// StrMap is a shortcut for #Get(key).StrMap() and avoids an extra Box allocation
+func (m *StrMap) StrMap(key string) *StrMap {
+	if m == nil {
+		return nil
+	}
+	return duckTypeStrMap(m.Map[key])
+}
+
 // Len returns the amount of entries in the map
 func (m *StrMap) Len() int {
 	m.init()

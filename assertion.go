@@ -88,7 +88,7 @@ func (i *Box) AsInt64() (int64, error) {
 
 // IsBoxSlice checks if the type is one of []interface{}|*[]interface{}|*Slice
 func (i *Box) IsSlice() bool {
-	if i == nil{
+	if i == nil {
 		return false
 	}
 	switch i.Value.(type) {
@@ -104,7 +104,7 @@ func (i *Box) IsSlice() bool {
 
 // AsSlice wraps the underlying slice into a Slice or returns nil
 func (i *Box) AsSlice() *Slice {
-	if i == nil{
+	if i == nil {
 		return nil
 	}
 	switch t := i.Value.(type) {
@@ -120,7 +120,7 @@ func (i *Box) AsSlice() *Slice {
 
 // IsMap checks if the type is map[string]interface{}
 func (i *Box) IsMap() bool {
-	if i == nil{
+	if i == nil {
 		return false
 	}
 	if _, ok := i.Value.(map[string]interface{}); ok {
@@ -131,7 +131,7 @@ func (i *Box) IsMap() bool {
 
 // AsMap tries to wrap a map[interface{}]interface{} or returns nil
 func (i *Box) AsMap() *Map {
-	if i == nil{
+	if i == nil {
 		return nil
 	}
 	switch t := i.Value.(type) {
@@ -145,7 +145,7 @@ func (i *Box) AsMap() *Map {
 
 // IsStrMap checks if the type is map[string]interface{}
 func (i *Box) IsStrMap() bool {
-	if i == nil{
+	if i == nil {
 		return false
 	}
 	if _, ok := i.Value.(map[string]interface{}); ok {
@@ -156,16 +156,10 @@ func (i *Box) IsStrMap() bool {
 
 // AsStrMap tries to wrap a map[string]interface{} or returns nil
 func (i *Box) AsStrMap() *StrMap {
-	if i == nil{
+	if i == nil {
 		return nil
 	}
-	switch t := i.Value.(type) {
-	case map[string]interface{}:
-		return &StrMap{t}
-	case *StrMap:
-		return t
-	}
-	return nil
+	return duckTypeStrMap(i.Value)
 }
 
 // AsContext tries to wrap a context.Context or asserts a std.Context, otherwise returns nil
@@ -195,40 +189,7 @@ func (i *Box) Int64() int64 {
 	if i == nil {
 		return 0
 	}
-	switch t := i.Value.(type) {
-	case int8:
-		return int64(t)
-	case uint8:
-		return int64(t)
-	case int16:
-		return int64(t)
-	case uint16:
-		return int64(t)
-	case int32:
-		return int64(t)
-	case uint32:
-		return int64(t)
-	case uint64:
-		return int64(t)
-	case int64:
-		return t
-	case int:
-		return int64(t)
-	case string:
-		i, _ := strconv.ParseInt(t, 10, 64)
-		return i
-	case float32:
-		return int64(t)
-	case float64:
-		return int64(t)
-	case bool:
-		if t {
-			return 1
-		}
-		return 0
-	default:
-		return 0
-	}
+	return duckTypeInt64(i.Value)
 }
 
 // Float tries to interpret any number gracefully into a Float. If it fails, returns NaN
@@ -292,8 +253,62 @@ func (i *Box) Bool() bool {
 
 // String returns a string representation of the boxed type, or the empty string if box is nil or refers to nil.
 func (i *Box) String() string {
-	if i == nil || i.Value == nil {
+	if i == nil {
 		return ""
 	}
-	return fmt.Sprintf("%+v", i.Value)
+	return duckTypeString(i.Value)
+}
+
+func duckTypeString(v interface{}) string {
+	if v == nil {
+		return ""
+	}
+	return fmt.Sprintf("%+v", v)
+}
+
+func duckTypeInt64(v interface{}) int64 {
+	switch t := v.(type) {
+	case int8:
+		return int64(t)
+	case uint8:
+		return int64(t)
+	case int16:
+		return int64(t)
+	case uint16:
+		return int64(t)
+	case int32:
+		return int64(t)
+	case uint32:
+		return int64(t)
+	case uint64:
+		return int64(t)
+	case int64:
+		return t
+	case int:
+		return int64(t)
+	case string:
+		i, _ := strconv.ParseInt(t, 10, 64)
+		return i
+	case float32:
+		return int64(t)
+	case float64:
+		return int64(t)
+	case bool:
+		if t {
+			return 1
+		}
+		return 0
+	default:
+		return 0
+	}
+}
+
+func duckTypeStrMap(v interface{}) *StrMap {
+	switch t := v.(type) {
+	case map[string]interface{}:
+		return &StrMap{t}
+	case *StrMap:
+		return t
+	}
+	return nil
 }
