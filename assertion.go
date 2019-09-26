@@ -263,7 +263,20 @@ func duckTypeString(v interface{}) string {
 	if v == nil {
 		return ""
 	}
-	return fmt.Sprintf("%+v", v)
+	switch t := v.(type) {
+	case string:
+		return t
+	case int:
+		return strconv.Itoa(t)
+	case bool:
+		return strconv.FormatBool(t)
+	case int64:
+		return strconv.FormatInt(t, 10)
+	case uint64:
+		return strconv.FormatUint(t, 10)
+	default:
+		return fmt.Sprintf("%+v", v)
+	}
 }
 
 func duckTypeInt64(v interface{}) int64 {
